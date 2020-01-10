@@ -8,11 +8,37 @@ min_y = 0
 max_y = 4
 min_x = 0
 max_x = 4
-block_size = 110
+block_size = 107
 padding_y = 474
-padding_x = 584
+padding_x = 585
 num_blocks_per_row = 4
 visited = [[False for _ in range(0, num_blocks_per_row)] for _ in range(0, num_blocks_per_row)]
+coord = [
+    [
+        (587, 475),
+        (695, 477),
+        (803, 476),
+        (907, 474)
+    ],
+    [
+        (586, 584),
+        (692, 583),
+        (802, 583),
+        (908, 580)
+    ],
+    [
+        (589, 686),
+        (691, 688),
+        (802, 688),
+        (912, 692)
+    ],
+    [
+        (588, 795),
+        (696, 796),
+        (799, 794),
+        (906, 795)
+    ]
+]
 start = time.time()
 
 def is_valid_pos(x, y):
@@ -20,10 +46,14 @@ def is_valid_pos(x, y):
 
 
 def get_coord(x, y):
-    return x * block_size + padding_x, y * block_size + padding_y
+    # return x * block_size + padding_x, y * block_size + padding_y
+    return coord[y][x]
 
 
 def drag():
+    if time.time() - start > 85:
+        print(len(pos_list), time.time() - start)
+        sys.exit()
     coord_x, coord_y = get_coord(*pos_list[0])
     pyautogui.moveTo(coord_x, coord_y)
     pyautogui.mouseDown()
@@ -49,16 +79,14 @@ def dfs(x, y, length):
 
 
 def main():
-    pyautogui.PAUSE = 0
-    for length in range(0, 16):
+    global pos_list
+
+    pyautogui.PAUSE = 0.0325
+    for length in range(1, 16):
         for y in range(0, 4):
-            if time.time() - start > 120:
-                print(length, y, x)
-                sys.exit()
             for x in range(0, 4):
-                pos_list.append((x, y))
+                pos_list = [(x, y)]
                 dfs(x, y, length)
-                pos_list.pop()
 
 
 
